@@ -1,0 +1,22 @@
+import pandas as pd
+df = pd.read_csv('abc.csv')
+#set_data = set(tuple(row) for row in df.to_numpy())
+
+salary_over_55000 = df[df['薪資(月薪)'] > 55000]['性別']
+gender_male = df[df['性別'] == '男']['薪資(月薪)']
+
+salary_over_55000_set = set(salary_over_55000)
+gender_male_set = set(gender_male)
+
+union_set = salary_over_55000_set.union(gender_male_set)
+print("聯集:", union_set)
+
+intersection_set = salary_over_55000_set.intersection(gender_male_set)
+print("交集:", intersection_set)
+difference_set = salary_over_55000_set.difference(gender_male_set)
+print("差集:", difference_set)
+
+# 薪水超過 55000 的員工中，有女性和男性，薪水範圍是 {52000, 60000, 56000, 57000, 53000, 59000}。
+# 性別為男性的員工中，沒有薪水超過 55000 的情況。
+# 薪水超過 55000 的員工與性別為男性的員工之間的交集為空集合，表示兩個集合沒有共同元素。
+# 差集中包含了所有薪水超過 55000 的員工的性別以及所有性別為男性的員工的性別，即 {'女', '男'}。
