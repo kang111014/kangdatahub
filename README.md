@@ -8,7 +8,7 @@
 # 自主學習筆記區
 
 # 作業連結區
-
+*  [作業1](https://github.com/chujun726/PL/blob/main/HW1/HW1.ipynb) 
 # 專題連結區   
 
 # Markdown 語法說明
