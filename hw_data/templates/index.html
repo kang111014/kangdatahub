@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日心情紀錄</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- 只需要 Chart.js 主函式庫即可 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>你今天心情如何？</h1>
+
+        <!-- 心情輸入表單 -->
+        <form method="POST">
+            <div class="form-group">
+                <label for="age">年紀：</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="mood_score">心情分數 (0-100)：</label>
+                <input type="number" id="mood_score" name="mood_score" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="nickname">暱稱：</label>
+                <input type="text" id="nickname" name="nickname" required>
+            </div>
+            <div class="form-group">
+                <label for="daily_message">每日小語：</label>
+                <textarea id="daily_message" name="daily_message" rows="3" required></textarea>
+            </div>
+            <button type="submit">送出紀錄</button>
+        </form>
+
+        <hr>
+
+        <!-- 心情圖表 -->
+        <h2>心情趨勢圖</h2>
+        <canvas id="moodLineChart"></canvas>
+
+        <!-- 心情紀錄列表 -->
+        <h2>大家的心情抒發</h2>
+        <div class="entries-container">
+            {% for entry in entries %}
+            <div class="entry-card">
+                <p><strong>暱稱：</strong> {{ entry.nickname }}</p>
+                <p><strong>年紀：</strong> {{ entry.age }}</p>
+                <p><strong>心情分數：</strong> {{ entry.mood_score }}</p>
+                <p><strong>每日小語：</strong> {{ entry.daily_message }}</p>
+                <p class="entry-date"><i>{{ entry.entry_date.strftime('%Y-%m-%d') }}</i></p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <!-- templates/index.html -->
+
+<!-- ... (body 的其他部分保持不變) ... -->
+
+        <script>
+        // 從 Flask 傳來的資料
+        const chartData = {{ chart_data | safe }};
+
+        // --- 只繪製折線圖 ---
+        const lineCtx = document.getElementById('moodLineChart').getContext('2d');
+        new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: chartData.line_labels,
+                datasets: [{
+                    label: '每日平均心情分數',
+                    data: chartData.line_values,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript 載入測試</title>
+</head>
+<body>
+    <h1>正在測試 JavaScript 檔案載入...</h1>
+    <p>請打開瀏覽器開發者工具 (F12) 並查看 Console (主控台)。</p>
+
+    <!-- 按照正確順序載入三個 JS 檔案 -->
+    <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/Chart.BoxPlot.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <!-- 執行一個簡單的測試腳本 -->
+    <script>
+        // 這個腳本會在所有檔案都載入後執行
+        try {
+            // 檢查 Chart.js 是否存在
+            if (typeof Chart !== 'undefined') {
+                console.log('%c✅ Chart.js 主函式庫載入成功！', 'color: green; font-weight: bold;');
+            
+                // 檢查 BoxPlot 插件是否成功註冊
+                if (Chart.controllers.boxplot) {
+                     console.log('%c✅ BoxPlot 插件載入成功！', 'color: green; font-weight: bold;');
+                } else {
+                     console.error('❌ 錯誤：BoxPlot 插件未能成功註冊到 Chart.js 上。');
+                }
+            } else {
+                console.error('❌ 致命錯誤：Chart.js 主函式庫未能載入。');
+            }
+        } catch (e) {
+            console.error('❌ 執行測試時發生錯誤:', e);
+        }
+    </script>
+</body>
+</html>
